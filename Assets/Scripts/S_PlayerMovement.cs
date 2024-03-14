@@ -9,8 +9,16 @@ public class S_PlayerMovement : MonoBehaviour
     public float speed = 6f;
     public float smoothTime = 0.1f;
     float smoothVelocity;
+    public float maxHealth = 100;
+    public float currentHealth;
 
-    // Update is called once per frame
+    public S_HealthBarScript healthBar;
+
+    void Start(){
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+    }
+
     void Update()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -23,6 +31,11 @@ public class S_PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f); 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDirection.normalized * speed * Time.deltaTime);
+        }
+        // TODO: Whenever the player takes damage in the future, subtract from the currentHealth float and call the healthBar.SetHealth()
+        if(Input.GetKeyDown(KeyCode.Space)){
+            currentHealth -= 5f;
+            healthBar.SetHealth(currentHealth);
         }
     }
 }
